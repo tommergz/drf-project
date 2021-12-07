@@ -41,7 +41,6 @@ class PostSerializer(serializers.ModelSerializer):
         fields = (
             'post',
             'content',
-            'reply_to',
             'created_at',
             'updated_at',
         )
