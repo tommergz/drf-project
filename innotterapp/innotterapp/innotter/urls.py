@@ -1,5 +1,5 @@
 from rest_framework import routers
-from .api import UserViewSet, TagViewSet, PageDetailViewSet
+from innotter.api import UserViewSet, TagViewSet, PageDetailViewSet
 
 
 router = routers.DefaultRouter()
