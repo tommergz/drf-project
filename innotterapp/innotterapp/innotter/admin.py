@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import User, Tag, Page, Post
+from innotter.models import User, Tag, Page, Post
 
 # Register your models here.
 

@@ -1,5 +1,6 @@
 from rest_framework import routers
-from innotter.api import UserViewSet, TagViewSet, PageDetailViewSet
+from django.urls import path, include
+from innotter.views import UserViewSet, TagViewSet, PageDetailViewSet
 
 
 router = routers.DefaultRouter()
@@ -8,4 +9,6 @@ router.register('api/tags', TagViewSet, 'tags')
 router.register('api/page', PageDetailViewSet, 'page')
 
 
-urlpatterns = router.urls
+urlpatterns = [
+  path('', include(router.urls))
+]

@@ -1,20 +1,35 @@
 from rest_framework import serializers
-from .models import User, Tag, Page
+from innotter.models import User, Tag, Page
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = (
+            'email',
+            'role',
+            'title',
+            'is_blocked'
+        )
 
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = '__all__'
+        fields = (
+            'name',
+        )
 
 
 class PageDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
-        fields = '__all__'
+        fields = (
+            'name',
+            'description',
+            'tags',
+            'owner',
+            'followers',
+            'is_private',
+            'follow_requests'
+        )
