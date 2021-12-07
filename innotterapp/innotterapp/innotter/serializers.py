@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from innotter.models import User, Tag, Page
+from innotter.models import User, Tag, Page, Post
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -33,3 +33,16 @@ class PageDetailSerializer(serializers.ModelSerializer):
             'is_private',
             'follow_requests'
         )
+
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = (
+            'post',
+            'content',
+            'reply_to',
+            'created_at',
+            'updated_at',
+        )
+        

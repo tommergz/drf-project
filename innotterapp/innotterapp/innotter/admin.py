@@ -23,7 +23,13 @@ class PageAdmin(admin.ModelAdmin):
     search_fields = ('name', 'owner', 'description',)
     list_filter = ('name', 'owner', 'description',)
 
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('content', 'created_at', 'updated_at',)
+    search_fields = ('content',)
+    list_filter = ('content',)    
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Page, PageAdmin)
+admin.site.register(Post, PostAdmin)
