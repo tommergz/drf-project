@@ -44,7 +44,7 @@ class TagSerializer(serializers.ModelSerializer):
         )
 
 
-class PageDetailSerializer(serializers.ModelSerializer):
+class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
         fields = (

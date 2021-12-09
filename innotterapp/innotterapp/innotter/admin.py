@@ -23,6 +23,7 @@ class PageAdmin(admin.ModelAdmin):
     search_fields = ('name', 'owner', 'description',)
     list_filter = ('name', 'owner', 'description',)
 
+
 class PostAdmin(admin.ModelAdmin):
     list_display = ('content', 'created_at', 'updated_at',)
     search_fields = ('content',)

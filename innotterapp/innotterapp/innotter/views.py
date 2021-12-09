@@ -1,14 +1,12 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
-from django.conf import settings
-from django.contrib import auth
 from rest_framework.decorators import action
-import jwt, datetime
 
 from innotter.models import User, Tag, Page, Post
 from rest_framework import mixins, serializers, viewsets, permissions, generics
-from innotter.serializers import UserSerializer, TagSerializer, PageDetailSerializer, PostSerializer
+from innotter.serializers import UserSerializer, TagSerializer, PageSerializer, PostSerializer
+from innotter.service import login
 
 
 class RegisterViewSet(
@@ -42,29 +40,9 @@ class UserViewSet(
 
    
     @action(detail=False, methods=['post'], url_path="login")
-    def login(self, request):
-        data = request.data
-        username = data.get('username', '')
-        password = data.get('password', '')
-        user = auth.authenticate(username=username, password=password)
+    def login_user(self, request):
+        return login(self, request)
 
-        if user:
-            payload = {
-                'id': user.id,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-                'iat': datetime.datetime.utcnow()
-            }
-            auth_token = jwt.encode(
-                payload, settings.JWT_SECRET_KEY, algorithm="HS256")
-
-            serializer = UserSerializer(user)
-
-            data = {'user': serializer.data, 'token': auth_token}
-
-            return Response(data, status=status.HTTP_200_OK)
-
-        
-        return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class TagViewSet(
     viewsets.GenericViewSet,
@@ -82,9 +60,10 @@ class TagViewSet(
         return self.serializer_classes.get(self.action)
 
 
-class PageDetailViewSet(
+class PageViewSet(
   viewsets.GenericViewSet,
-  mixins.RetrieveModelMixin
+  mixins.RetrieveModelMixin,
+  mixins.CreateModelMixin
 ):
     queryset = Page.objects.all()
 
@@ -93,7 +72,7 @@ class PageDetailViewSet(
     )
 
     serializer_classes = {
-        "retrieve": PageDetailSerializer,
+        "retrieve": PageSerializer,
     }
 
     def get_serializer_class(self):
