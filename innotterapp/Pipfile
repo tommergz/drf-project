@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "3.2.8"
+djangorestframework = "*"
+django-rest-knox = "*"
+python-dotenv = "*"
+psycopg2-binary = "*"
+pyjwt = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
