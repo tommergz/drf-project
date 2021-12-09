@@ -7,7 +7,7 @@ from django.conf import settings
 from innotter.serializers import UserSerializer
 
 
-def login(self, request):
+def login_user(request):
     data = request.data
     username = data.get('username', '')
     password = data.get('password', '')
@@ -26,7 +26,6 @@ def login(self, request):
 
         data = {'user': serializer.data, 'token': auth_token}
 
-        return Response(data, status=status.HTTP_200_OK)
-
-    
-    return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        return data
+        
+    return False

@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
+import jwt, datetime
+from django.contrib import auth
 from rest_framework.decorators import action
 
+from django.conf import settings
 from innotter.models import User, Tag, Page, Post
 from rest_framework import mixins, serializers, viewsets, permissions, generics
 from innotter.serializers import UserSerializer, TagSerializer, PageSerializer, PostSerializer
-from innotter.service import login
+from innotter.service import login_user
 
 
 class RegisterViewSet(
@@ -40,8 +43,13 @@ class UserViewSet(
 
    
     @action(detail=False, methods=['post'], url_path="login")
-    def login_user(self, request):
-        return login(self, request)
+    def login(self, request):
+        data = login_user(request)
+
+        if data:
+            return Response(data, status=status.HTTP_200_OK)
+    
+        return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class TagViewSet(
@@ -61,9 +69,10 @@ class TagViewSet(
 
 
 class PageViewSet(
-  viewsets.GenericViewSet,
-  mixins.RetrieveModelMixin,
-  mixins.CreateModelMixin
+    mixins.CreateModelMixin,
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
 ):
     queryset = Page.objects.all()
 
@@ -72,6 +81,8 @@ class PageViewSet(
     )
 
     serializer_classes = {
+        "create": PageSerializer,
+        "list": PageSerializer,
         "retrieve": PageSerializer,
     }
 
