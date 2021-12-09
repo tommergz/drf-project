@@ -9,6 +9,7 @@ class User(AbstractUser):
         ADMIN = 'admin'
 
     email = models.EmailField(unique=True)
+    password = models.CharField(max_length=65,)
     s3_path = models.CharField(max_length=200, null=True, blank=True)
     role = models.CharField(max_length=9, choices=Roles.choices)
 
