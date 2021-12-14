@@ -16,7 +16,7 @@ def login_user(request):
     if user:
         payload = {
             'id': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=50000),
             'iat': datetime.datetime.utcnow()
         }
         auth_token = jwt.encode(
@@ -29,3 +29,17 @@ def login_user(request):
         return data
         
     return False
+
+
+def get_new_follower_id(self, request):
+    id = request.user.id
+
+    page = self.get_object()
+
+    if page.is_private:
+        page.follow_requests.add(id)
+    
+    else:
+        page.followers.add(id)   
+
+    return id

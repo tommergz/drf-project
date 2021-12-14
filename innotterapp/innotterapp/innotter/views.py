@@ -9,7 +9,7 @@ from django.conf import settings
 from innotter.models import User, Tag, Page, Post
 from rest_framework import mixins, serializers, viewsets, permissions, generics
 from innotter.serializers import UserSerializer, TagSerializer, PageSerializer, PostSerializer
-from innotter.service import login_user
+from innotter.service import login_user, get_new_follower_id
 
 
 class RegisterViewSet(
@@ -69,10 +69,11 @@ class TagViewSet(
 
 
 class PageViewSet(
-    mixins.CreateModelMixin,
     viewsets.GenericViewSet,
+    mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
 ):
     queryset = Page.objects.all()
 
@@ -89,9 +90,16 @@ class PageViewSet(
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action)
 
+    @action(detail=True, methods=['post'], url_path="add_follower")
+    def add_follower(self, request, pk):
+        id = get_new_follower_id(self, request)
+    
+        return Response(id, status=status.HTTP_200_OK)
+
 
 class PostViewSet(
   viewsets.GenericViewSet,
+    mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
 ):
@@ -102,6 +110,7 @@ class PostViewSet(
     )
 
     serializer_classes = {
+        "create": PostSerializer,
         "list": PostSerializer,
         "retrieve": PostSerializer,
     }
