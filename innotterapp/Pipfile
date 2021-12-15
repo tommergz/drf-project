@@ -10,6 +10,8 @@ django-rest-knox = "*"
 python-dotenv = "*"
 psycopg2-binary = "*"
 pyjwt = "*"
+boto3 = "*"
+django-storages = "*"
 
 [dev-packages]
 

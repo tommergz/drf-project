@@ -57,11 +57,12 @@ class PageSerializer(serializers.ModelSerializer):
         )
 
 
+
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = (
-            'post',
+            'page',
             'content',
             'created_at',
             'updated_at',
