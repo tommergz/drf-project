@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from innotter.models import User, Tag, Page, Post
 
+from innotter.s3_service import add_file
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,13 +51,22 @@ class PageSerializer(serializers.ModelSerializer):
         fields = (
             'name',
             'description',
+            'uuid',
             'tags',
+            'image',
             'owner',
             'followers',
             'is_private',
             'follow_requests'
         )
 
+
+    def create(self, validated_data):
+        image_name = None
+        if validated_data.__contains__('image'):
+            image_name = add_file(validated_data['image'])
+            validated_data['image'] = image_name
+        return Page.objects.create(**validated_data)
 
 
 class PostSerializer(serializers.ModelSerializer):

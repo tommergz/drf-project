@@ -73,6 +73,7 @@ class PageViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
 ):
     queryset = Page.objects.all()
@@ -85,6 +86,7 @@ class PageViewSet(
         "create": PageSerializer,
         "list": PageSerializer,
         "retrieve": PageSerializer,
+        "partial_update": PageSerializer
     }
 
     def get_serializer_class(self):

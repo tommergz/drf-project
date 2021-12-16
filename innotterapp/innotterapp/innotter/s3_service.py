@@ -1,22 +1,20 @@
-# import boto3
+from datetime import datetime
+import os
+import boto3
 
-# s3 = boto3.resource('s3')
+
+from innotter.utils import get_object
 
 
-# for bucket in s3.buckets.all():
-#     print(bucket.name)
+bucket = os.environ.get('BUCKET_NAME')
 
-# data = open('test.jpg', 'rb')
-# s3.Bucket('my-bucket').put_object(Key='test.jpg', Body=data)
-# def add_file(self, request):
-#     id = request.user.id
 
-#     page = self.get_object()
+def add_file(local_file):
+    new_img = f"{bucket}/{datetime.now().microsecond}.jpg"
+    s3 = boto3.client('s3', aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+                      aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+                      region_name='eu-north-1')
+    s3.put_object(Bucket=bucket, Key=new_img, Body=local_file)
 
-#     if page.is_private:
-#         page.follow_requests.add(id)
-    
-#     else:
-#         page.followers.add(id)   
-
-#     return id
+    presigned_url = get_object(s3, bucket, new_img)
+    return presigned_url
