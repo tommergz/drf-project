@@ -46,6 +46,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class PageSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True)
     class Meta:
         model = Page
         fields = (
@@ -67,6 +68,27 @@ class PageSerializer(serializers.ModelSerializer):
             image_name = add_file(validated_data['image'])
             validated_data['image'] = image_name
         return Page.objects.create(**validated_data)
+
+
+    # def update(self, instance, validated_data):     
+    #     # instance.name = validated_data.get('name', instance.name)
+    #     # instance.uuid = validated_data.get('uuid', instance.uuid)
+    #     # instance.description = validated_data.get('description', instance.description)
+    #     # # instance.tags = validated_data.get('tags', instance.tags)
+    #     # instance.owner = validated_data.get('owner', instance.owner)
+    #     # # instance.followers = validated_data.get('followers', instance.followers)
+    #     # instance.image = validated_data.get('image', instance.image)
+    #     # instance.is_private = validated_data.get('is_private', instance.is_private)
+    #     # # instance.follow_requests = validated_data.get('follow_requests', instance.follow_requests)
+    #     # instance.unblock_date = validated_data.get('unblock_date', instance.unblock_date)
+
+    # OR
+
+    #     for attr, value in validated_data.items():
+    #         setattr(instance, attr, value)
+        
+    #     instance.save()
+    #     return instance
 
 
 class PostSerializer(serializers.ModelSerializer):

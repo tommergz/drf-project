@@ -10,6 +10,7 @@ from innotter.models import User, Tag, Page, Post
 from rest_framework import mixins, serializers, viewsets, permissions, generics
 from innotter.serializers import UserSerializer, TagSerializer, PageSerializer, PostSerializer
 from innotter.service import login_user, get_new_follower_id
+from innotter.s3_service import add_file
 
 
 class RegisterViewSet(
@@ -98,6 +99,15 @@ class PageViewSet(
     
         return Response(id, status=status.HTTP_200_OK)
 
+    
+    def perform_update(self, serializer):
+        data = serializer.validated_data
+        image_name = None
+        if data.__contains__('image'):
+            image_name = add_file(data['image'])
+            serializer.validated_data['image'] = image_name
+        serializer.save()
+        
 
 class PostViewSet(
   viewsets.GenericViewSet,
